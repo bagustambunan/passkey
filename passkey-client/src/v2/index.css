@@ -1,0 +1,200 @@
+:root {
+  --primary-color: #84CCF8;
+  --primary-color-hover: #106194;
+  --text-color: #213547;
+  --text-color-with-opacity: rgba(0, 0, 0, 0.5);
+  --border-color: rgba(0, 0, 0, 0.1);
+  --background-color: #ffffff;
+  --button-color: #f9f9f9;
+  --hover-color: rgba(0, 0, 0, 0.1);
+
+  --app-padding: 72px;
+  --menu-width: 160px;
+  --font-size: 1em;
+
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: var(--text-color);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  font-size: var(--font-size);
+}
+
+@media (max-width: 600px) {
+  :root {
+    --app-padding: 16px;
+    --menu-width: 0px;
+    --carousel-padding: 8px;
+  }
+  body {
+    margin-bottom: 64px !important;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 1000px) {
+  :root {
+    --app-padding: 48px;
+    --menu-width: 120px;
+    --carousel-padding: 24px;
+  }
+}
+
+a {
+  font-weight: 500;
+  color: var(--primary-color);
+  text-decoration: inherit;
+}
+a:hover {
+  color: var(--primary-color-hover);
+}
+
+html {
+  height: 100%;
+  background-image: url('https://plus.unsplash.com/premium_photo-1681400745727-c69f8e47f524');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+body {
+  display: relative;
+  margin: 0;
+  padding: var(--app-padding);
+  word-wrap: break-word;
+}
+
+hi, h2, h3, h4, h5, h6, p {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.horizontal-container {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.window-container {
+  position: absolute;
+}
+
+.window-body {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+
+  resize: both;
+  overflow: hidden;
+
+  min-width: 320px;
+  min-height: 240px;
+
+  max-width: calc(100dvw - var(--app-padding) * 2 - var(--menu-width));
+  max-height: calc(100dvh - var(--app-padding) * 2);
+
+  transition: all 0.3s ease;
+}
+
+.window-header {
+  padding: 12px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  cursor: move;
+  background-color: var(--background-color);
+  border-bottom: 1px solid var(--border-color);
+
+  position: sticky;
+  top: 0;
+}
+
+.window-title {
+  font-weight: 600;
+  color: var(--text-color);
+  cursor: default;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.window-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.window-actions button {
+  border: none;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--background-color);
+}
+
+.button-disabled {
+  cursor: not-allowed !important;
+  opacity: 0.5;
+}
+
+.maximize-button {
+  background-color: rgb(255, 204, 103);
+}
+
+.maximize-button:hover {
+  background-color: rgb(227, 174, 75);
+}
+
+.close-button {
+  background-color: rgb(224, 83, 83);
+}
+
+.close-button:hover {
+  background-color: rgb(177, 57, 57);
+}
+
+.window-content {
+  padding: 16px;
+  overflow: auto;
+}
+
+.full-width {
+  width: calc(100dvw - var(--app-padding) * 2);
+}
+
+.full-height {
+  height: calc(100dvh - var(--app-padding) * 2);
+}
+
+.full-screen {
+  max-width: 100dvw;
+  width: 100dvw;
+  max-height: 100dvh;
+  height: 100dvh;
+  resize: none;
+}
+
+.hidden {
+  display: none;
+}

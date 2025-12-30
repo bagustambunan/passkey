@@ -1,0 +1,58 @@
+.folderContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding-bottom: 8px;
+  border-radius: 8px;
+  width: 120px;
+  border: 2px solid transparent;
+}
+
+.folderContainer:hover {
+  background-color: var(--hover-color);
+}
+
+.folderIcon {
+  width: 80%;
+}
+
+.folderContent {
+  font-weight: 500;
+  color: var(--text-color);
+  font-size: 1em;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.clicked {
+  border-color: var(--primary-color);
+}
+
+@media (max-width: 600px) {
+  .folderContainer {
+    width: fit-content;
+    flex-direction: row;
+    align-items: center;
+    padding-bottom: 2px;
+    gap: 4px;
+    padding: 4px;
+  }
+  .folderIcon {
+    width: 24px;
+    height: 24px;
+  }
+  .folderContent {
+    text-align: left;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 1000px) {
+  .folderContainer {
+    width: 100px;
+  }
+}
