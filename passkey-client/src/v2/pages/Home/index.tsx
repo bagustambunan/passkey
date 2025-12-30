@@ -1,12 +1,14 @@
 import { useState } from "react";
 import Button from "../../../shared/components/Button";
 import Input from "../../../shared/components/Input";
+import useAuth from "../../hooks/useAuth";
 
 export default function HomePage() {
   const [form, setForm] = useState({
     username: "",
     password: "",
   });
+  const { handleLogin } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -14,7 +16,7 @@ export default function HomePage() {
 
   const handleSubmit = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
-    console.log(form);
+    handleLogin(form.username, form.password);
   };
 
   return (
