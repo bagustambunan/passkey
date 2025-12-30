@@ -1,7 +1,8 @@
 import express, { Router } from 'express';
-import authRoutes from './auth.route';
+import { handleProfile } from '../controllers/auth.controller';
 
 const router: Router = express.Router();
-router.use('/auth', authRoutes);
+
+router.get('/profile', handleProfile);
 
 export default router;
