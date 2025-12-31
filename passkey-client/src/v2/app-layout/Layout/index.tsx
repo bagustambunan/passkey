@@ -29,7 +29,6 @@ export default function Layout() {
               navigate(routes.home);
             }
           }}
-          customStyle={{ other: { fullWidth: true } }}
         >
           <Outlet />
         </Window>

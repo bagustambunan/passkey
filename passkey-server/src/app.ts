@@ -10,6 +10,7 @@ dotenv.config();
 const app: Express = express();
 
 const corsOptions: CorsOptions = {
+  origin: 'http://localhost:5173',
   credentials: true,
   methods: ['GET', 'POST'],
 };

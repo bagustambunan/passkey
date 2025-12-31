@@ -19,7 +19,11 @@ export const handleLogin = async (
     if (user.password !== password) {
       throw new Error('Invalid password');
     }
-    res.cookie('username', username);
+    res.cookie('AUTH_USERNAME', username, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 1000 * 60 * 60 * 24 * 30,
+    });
     res.status(200).json({ message: 'Login successful' });
   } catch (error) {
     next(error);
@@ -33,7 +37,7 @@ export const handleProfile = async (
 ): Promise<void> => {
   try {
     const incomingCookie = req.headers.cookie ?? '';
-    const username = getCookieValue(incomingCookie, 'username');
+    const username = getCookieValue(incomingCookie, 'AUTH_USERNAME');
 
     if (!username) {
       throw new Error('Username not found in cookie');
@@ -58,7 +62,7 @@ export const handleLogout = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    res.clearCookie('username');
+    res.clearCookie('AUTH_USERNAME');
     res.status(200).json({ message: 'Logout successful' });
   } catch (error) {
     next(error);
