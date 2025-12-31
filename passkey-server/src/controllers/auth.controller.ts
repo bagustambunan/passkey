@@ -30,7 +30,7 @@ export const handleLogin = async (
   }
 };
 
-export const handleProfile = async (
+export const handleUser = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -49,7 +49,9 @@ export const handleProfile = async (
     }
 
     res.status(200).json({
-      username: user.username,
+      data: {
+        username: user.username,
+      },
     });
   } catch (error) {
     next(error);

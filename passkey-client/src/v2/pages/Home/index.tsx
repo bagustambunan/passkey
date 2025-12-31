@@ -1,50 +1,25 @@
-import { useState } from "react";
+import type { RootState } from "../../redux/store";
 import Button from "../../../shared/components/Button";
-import Input from "../../../shared/components/Input";
-import useAuth from "../../hooks/useAuth";
+import { logout } from "../../../shared/utils/service";
+import { useAsync } from "../../../shared/hooks/useAsync";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { logout as logoutAction } from "../../redux/slices/userSlice";
 
 export default function HomePage() {
-  const [form, setForm] = useState({
-    username: "",
-    password: "",
-  });
-  const { handleLogin } = useAuth();
+  const { user } = useAppSelector((state: RootState) => state.user);
+  const dispatch = useAppDispatch();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const logoutAsync = useAsync(logout);
 
-  const handleSubmit = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    handleLogin(form.username, form.password);
+  const handleLogout = async () => {
+    logoutAsync.execute();
+    dispatch(logoutAction());
   };
 
   return (
     <div className="container">
-      <form
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "16px",
-          width: 300,
-        }}
-      >
-        <Input
-          type="text"
-          name="username"
-          placeholder="Username"
-          value={form.username}
-          onChange={handleChange}
-        />
-        <Input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-        />
-        <Button onClick={handleSubmit}>Login</Button>
-      </form>
+      <span>Hi, {user?.username}</span>
+      <Button onClick={handleLogout} loading={logoutAsync.isPending}>Logout</Button>
     </div>
   );
 }

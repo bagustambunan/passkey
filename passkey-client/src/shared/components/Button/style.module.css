@@ -6,6 +6,9 @@
   font-size: 0.9em;
   cursor: pointer;
   color: var(--text-color);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .button:hover {

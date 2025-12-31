@@ -4,9 +4,16 @@ import type { PageConfig } from "./types";
 
 export const pages: PageConfig[] = [
   {
-    windowKey: "home",
+    windowKey: "login",
     title: "Login",
     icon: "🔒",
+    route: routes.login,
+    component: lazy(() => import("../pages/Login")),
+  },
+  {
+    windowKey: "home",
+    title: "Home",
+    icon: "🏠",
     route: routes.home,
     component: lazy(() => import("../pages/Home")),
   },
