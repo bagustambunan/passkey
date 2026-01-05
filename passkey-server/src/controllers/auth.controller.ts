@@ -40,7 +40,7 @@ export const handleUser = async (
     const username = getCookieValue(incomingCookie, 'AUTH_USERNAME');
 
     if (!username) {
-      throw new Error('Username not found in cookie');
+      throw new Error('No auth');
     }
 
     const user = await getUser(username);
