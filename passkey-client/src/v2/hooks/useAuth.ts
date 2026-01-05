@@ -12,10 +12,6 @@ const useAuth = () => {
   const getUserAsync = useAsync(getUser);
 
   useEffect(() => {
-    getUserAsync.execute();
-  }, []);
-
-  useEffect(() => {
     if (getUserAsync.value?.data?.username) {
       dispatch(setUser(getUserAsync.value.data));
     }

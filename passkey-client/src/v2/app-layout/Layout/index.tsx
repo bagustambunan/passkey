@@ -9,7 +9,7 @@ import styles from "./style.module.css";
 import useAuth from "../../hooks/useAuth";
 
 export default function Layout() {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, triggerGetUser } = useAuth();
 
   const navigate = useNavigate();
   const pathname = useLocation().pathname;
@@ -28,6 +28,10 @@ export default function Layout() {
       navigate(routes.login);
     }
   }, [isLoggedIn, pathname, navigate]);
+
+  useEffect(() => {
+    triggerGetUser();
+  }, []);
 
   return (
     <main className={styles.layout}>
