@@ -22,3 +22,23 @@ export type User = {
 };
 
 export type LogoutResponse = Response<undefined>;
+
+export type StartPasskeyRegistrationResponse = Response<PublicKeyCredentialCreationOptionsJSON>;
+
+export type FinishPasskeyRegistrationResponse = Response<undefined>;
+
+export type Credential = Omit<PublicKeyCredential, "response"> & {
+  response: AuthenticatorResponse & {
+    attestationObject: ArrayBuffer;
+  };
+};
+
+export type StringifiedCredential = {
+  id: string;
+  rawId: string;
+  response: {
+    clientDataJSON: string;
+    attestationObject: string;
+  };
+  type: PublicKeyCredentialType;
+};

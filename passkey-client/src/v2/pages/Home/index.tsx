@@ -4,6 +4,7 @@ import { logout } from "../../../shared/utils/service";
 import { useAsync } from "../../../shared/hooks/useAsync";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { logout as logoutAction } from "../../redux/slices/userSlice";
+import usePasskey from "../../hooks/usePasskey";
 
 export default function HomePage() {
   const { user } = useAppSelector((state: RootState) => state.user);
@@ -16,10 +17,17 @@ export default function HomePage() {
     dispatch(logoutAction());
   };
 
+  const { isPasskeySupported, handleRegisterPasskey } = usePasskey();
+
   return (
     <div className="container">
       <span>Hi, {user?.username}</span>
-      <Button onClick={handleLogout} loading={logoutAsync.isPending}>Logout</Button>
+      {isPasskeySupported && (
+        <Button onClick={handleRegisterPasskey}>Register Passkey</Button>
+      )}
+      <Button onClick={handleLogout} loading={logoutAsync.isPending}>
+        Logout
+      </Button>
     </div>
   );
 }

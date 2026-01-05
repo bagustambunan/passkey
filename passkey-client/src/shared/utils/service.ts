@@ -1,4 +1,12 @@
-import type { GetUserResponse, LoginRequest, LoginResponse, LogoutResponse } from "../constants/types";
+import type {
+  FinishPasskeyRegistrationResponse,
+  GetUserResponse,
+  LoginRequest,
+  LoginResponse,
+  LogoutResponse,
+  StartPasskeyRegistrationResponse,
+  StringifiedCredential,
+} from "../constants/types";
 import { get, post } from "./fetch";
 
 export const login = async (username: string, password: string) => {
@@ -19,6 +27,26 @@ export const getUser = async () => {
 export const logout = async () => {
   const response = await get<null, LogoutResponse>({
     url: "auth/logout",
+  });
+  return response;
+};
+
+export const startPasskeyRegistration = async () => {
+  const response = await get<null, StartPasskeyRegistrationResponse>({
+    url: "passkey/register/start",
+  });
+  return response;
+};
+
+export const finishPasskeyRegistration = async (
+  credential: StringifiedCredential
+) => {
+  const response = await post<
+    StringifiedCredential,
+    FinishPasskeyRegistrationResponse
+  >({
+    url: "passkey/register/finish",
+    data: credential,
   });
   return response;
 };
