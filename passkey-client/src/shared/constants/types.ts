@@ -42,3 +42,7 @@ export type StringifiedCredential = {
   };
   type: PublicKeyCredentialType;
 };
+
+export type StartPasskeyAuthenticationResponse = Response<PublicKeyCredentialRequestOptions>;
+
+export type FinishPasskeyAuthenticationResponse = Response<undefined>;

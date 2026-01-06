@@ -19,3 +19,12 @@ export type StringifiedCredential = {
   type: PublicKeyCredentialType;
   transports?: string[];
 };
+
+export type AuthenticationCredential = {
+  id: string;
+  response: AuthenticatorResponse & {
+    authenticatorData: string;
+    clientDataJSON: string;
+    signature: string;
+  };
+};

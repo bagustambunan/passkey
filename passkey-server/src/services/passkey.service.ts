@@ -1,9 +1,13 @@
 import {
   generateAuthenticationOptions,
   generateRegistrationOptions,
+  verifyAuthenticationResponse,
   verifyRegistrationResponse,
 } from '@simplewebauthn/server';
-import { StringifiedCredential } from '../types/model';
+import {
+  AuthenticationCredential,
+  StringifiedCredential,
+} from '../types/model';
 
 const rpID = 'localhost';
 const rpName = 'Passkey Demo App';
@@ -120,4 +124,55 @@ export const generatePasskeyAuthenticationOptions = async (
   challenges.set(username, options.challenge);
 
   return options;
+};
+
+export const verifyPasskeyAuthentication = async (
+  username: string,
+  credential: AuthenticationCredential
+) => {
+  // 1. Get stored challenge
+  const expectedChallenge = challenges.get(username);
+  if (!expectedChallenge) {
+    throw new Error('No authentication challenge found for user');
+  }
+
+  // 2. Remove challenge (one-time use)
+  challenges.delete(username);
+
+  // 3. Get user's registered credentials
+  const userCredentialsList = userCredentials.get(username) || [];
+  const credentialIndex = userCredentialsList.findIndex(
+    cred => cred.id === credential.id
+  );
+
+  if (credentialIndex === -1) {
+    throw new Error('Credential not found for user');
+  }
+
+  const userCredential = userCredentialsList[credentialIndex];
+
+  // 4. Verify authentication response
+  const verification = await verifyAuthenticationResponse({
+    response: credential.response,
+    expectedChallenge,
+    expectedOrigin: origin,
+    expectedRPID: rpID,
+    authenticator: {
+      credentialID: Buffer.from(userCredential.id, 'base64url'),
+      credentialPublicKey: userCredential.publicKey,
+      counter: userCredential.counter,
+      transports: userCredential.transports,
+    },
+  });
+
+  if (!verification.verified) {
+    throw new Error('Passkey authentication verification failed');
+  }
+
+  // 5. Update credential counter
+  userCredentialsList[credentialIndex].counter =
+    verification.authenticationInfo.newCounter;
+  userCredentials.set(username, userCredentialsList);
+
+  return { verified: true, username };
 };

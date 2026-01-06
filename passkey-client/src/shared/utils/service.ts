@@ -1,9 +1,11 @@
 import type {
+  FinishPasskeyAuthenticationResponse,
   FinishPasskeyRegistrationResponse,
   GetUserResponse,
   LoginRequest,
   LoginResponse,
   LogoutResponse,
+  StartPasskeyAuthenticationResponse,
   StartPasskeyRegistrationResponse,
   StringifiedCredential,
 } from "../constants/types";
@@ -47,6 +49,31 @@ export const finishPasskeyRegistration = async (
   >({
     url: "passkey/register/finish",
     data: credential,
+  });
+  return response;
+};
+
+export const startPasskeyAuthentication = async (username: string) => {
+  const response = await post<
+    { username: string },
+    StartPasskeyAuthenticationResponse
+  >({
+    url: "passkey/login/start",
+    data: { username },
+  });
+  return response;
+};
+
+export const finishPasskeyAuthentication = async (
+  username: string,
+  credential: StringifiedCredential
+) => {
+  const response = await post<
+    { username: string; credential: StringifiedCredential },
+    FinishPasskeyAuthenticationResponse
+  >({
+    url: "passkey/login/finish",
+    data: { username, credential },
   });
   return response;
 };

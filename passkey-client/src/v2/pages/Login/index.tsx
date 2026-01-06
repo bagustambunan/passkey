@@ -4,6 +4,7 @@ import Button from "../../../shared/components/Button";
 import { useAsync } from "../../../shared/hooks/useAsync";
 import { login } from "../../../shared/utils/service";
 import useAuth from "../../hooks/useAuth";
+import Tabs from "../../../shared/components/Tabs";
 
 export default function LoginPage() {
   const { triggerGetUser } = useAuth();
@@ -43,23 +44,54 @@ export default function LoginPage() {
           width: 300,
         }}
       >
-        <Input
-          type="text"
-          name="username"
-          placeholder="Username"
-          value={form.username}
-          onChange={handleChange}
+        <Tabs
+          key="login"
+          tabItems={[
+            {
+              key: "with-password",
+              label: "With Password",
+              content: (
+                <>
+                  <Input
+                    type="text"
+                    name="username"
+                    placeholder="Username"
+                    value={form.username}
+                    onChange={handleChange}
+                  />
+                  <Input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    value={form.password}
+                    onChange={handleChange}
+                  />
+                  <Button onClick={handleSubmit} loading={loginAsync.isPending}>
+                    Login
+                  </Button>
+                </>
+              ),
+            },
+            {
+              key: "with-passkey",
+              label: "With Passkey",
+              content: (
+                <>
+                  <Input
+                    type="text"
+                    name="username"
+                    placeholder="Username"
+                    value={form.username}
+                    onChange={handleChange}
+                  />
+                  <Button onClick={handleSubmit} loading={loginAsync.isPending}>
+                    Login with Passkey
+                  </Button>
+                </>
+              ),
+            },
+          ]}
         />
-        <Input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-        />
-        <Button onClick={handleSubmit} loading={loginAsync.isPending}>
-          Login
-        </Button>
       </form>
     </div>
   );
