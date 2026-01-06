@@ -8,10 +8,10 @@ import type {
   Credential,
   StringifiedCredential,
 } from "../../shared/constants/types";
-import {
-  arrayBufferToBase64Url,
-  stringToArrayBuffer,
-} from "../../shared/utils";
+  import {
+    arrayBufferToBase64Url,
+    base64UrlToUint8Array,
+  } from "../../shared/utils";
 
 const usePasskey = () => {
   const isPasskeySupported = !!navigator.credentials.create;
@@ -19,6 +19,9 @@ const usePasskey = () => {
   const finishPasskeyRegistrationAsync = useAsync(finishPasskeyRegistration);
 
   const handleRegisterPasskey = async () => {
+    if (startPasskeyRegistrationAsync.isPending || finishPasskeyRegistrationAsync.isPending) {
+      return;
+    }
     startPasskeyRegistrationAsync.execute();
   };
 
@@ -50,27 +53,27 @@ const usePasskey = () => {
   useEffect(() => {
     if (startPasskeyRegistrationAsync.value?.data) {
       const optionsFromServer = startPasskeyRegistrationAsync.value.data;
-      const publicKeyCredentialCreationOptions: PublicKeyCredentialCreationOptions =
-        {
-          challenge: stringToArrayBuffer(optionsFromServer.challenge),
-          rp: optionsFromServer.rp,
-          user: {
-            id: stringToArrayBuffer(optionsFromServer.user.id),
-            name: optionsFromServer.user.name,
-            displayName: optionsFromServer.user.displayName,
+        const publicKeyCredentialCreationOptions: PublicKeyCredentialCreationOptions =
+          {
+            challenge: base64UrlToUint8Array(optionsFromServer.challenge),
+            rp: optionsFromServer.rp,
+            user: {
+              id: base64UrlToUint8Array(optionsFromServer.user.id),
+              name: optionsFromServer.user.name,
+              displayName: optionsFromServer.user.displayName,
           },
           pubKeyCredParams: optionsFromServer.pubKeyCredParams,
           authenticatorSelection: optionsFromServer.authenticatorSelection,
           attestation:
             optionsFromServer.attestation as AttestationConveyancePreference,
           ...(optionsFromServer.excludeCredentials && {
-            excludeCredentials: optionsFromServer.excludeCredentials.map(
-              (cred) => ({
-                id: stringToArrayBuffer(cred.id),
-                type: cred.type as PublicKeyCredentialType,
-                transports: cred.transports as AuthenticatorTransport[],
-              })
-            ),
+              excludeCredentials: optionsFromServer.excludeCredentials?.map(
+                (cred) => ({
+                  id: base64UrlToUint8Array(cred.id),
+                  type: cred.type as PublicKeyCredentialType,
+                  transports: cred.transports as AuthenticatorTransport[],
+                })
+              ),
           }),
         };
       handleFinishPasskeyRegistration(publicKeyCredentialCreationOptions);

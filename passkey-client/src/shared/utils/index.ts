@@ -1,6 +1,19 @@
-export function stringToArrayBuffer(str: string): ArrayBuffer {
-  const encoder = new TextEncoder();
-  return encoder.encode(str).buffer;
+export function base64UrlToUint8Array(base64UrlString: string): Uint8Array {
+  const base64 = base64UrlString
+    .replace(/-/g, '+')
+    .replace(/_/g, '/');
+
+  // Pad with '=' to make length a multiple of 4
+  const padded = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=');
+
+  const rawData = window.atob(padded);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+
+  return outputArray;
 }
 
 export function arrayBufferToBase64Url(buffer: ArrayBuffer) {

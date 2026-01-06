@@ -14,6 +14,11 @@ const challenges = new Map<string, string>();
 const userCredentials = new Map<string, any[]>();
 
 export const generatePasskeyRegistrationOptions = async (username: string) => {
+  // Check if user already has a pending challenge
+  if (challenges.has(username)) {
+    throw new Error('Registration already in progress for this user');
+  }
+
   // Generate options with @simplewebauthn/server
   const options = await generateRegistrationOptions({
     rpName,
@@ -38,7 +43,9 @@ export const verifyPasskeyRegistration = async (
   username: string,
   stringifiedCredential: StringifiedCredential
 ) => {
-  console.log('credential', stringifiedCredential);
+  // if (userCredentials.has(username)) {
+  //   throw new Error('User already has a passkey registered');
+  // }
 
   // 1. Get challenge that was saved previously
   const expectedChallenge = challenges.get(username);
