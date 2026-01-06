@@ -1,4 +1,5 @@
 import {
+  generateAuthenticationOptions,
   generateRegistrationOptions,
   verifyRegistrationResponse,
 } from '@simplewebauthn/server';
@@ -91,4 +92,32 @@ export const verifyPasskeyRegistration = async (
   userCredentials.set(username, existingCredentials);
 
   return { verified: true };
+};
+
+export const generatePasskeyAuthenticationOptions = async (
+  username: string
+) => {
+  // 1. Get user's registered credentials
+  const userCredentialsList = userCredentials.get(username) || [];
+
+  // 2. Check if user has any passkeys
+  if (userCredentialsList.length === 0) {
+    throw new Error('No passkeys registered for this user');
+  }
+
+  // 3. Generate authentication options
+  const options = await generateAuthenticationOptions({
+    rpID,
+    // Allow only the user's registered credentials
+    allowCredentials: userCredentialsList.map(cred => ({
+      id: cred.id, // base64url string
+      type: 'public-key',
+    })),
+    userVerification: 'preferred',
+  });
+
+  // 4. Store challenge for verification
+  challenges.set(username, options.challenge);
+
+  return options;
 };

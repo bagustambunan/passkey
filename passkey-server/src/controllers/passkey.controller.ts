@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { getCookieValue } from '../utils/cookie';
 import {
+  generatePasskeyAuthenticationOptions,
   generatePasskeyRegistrationOptions,
   verifyPasskeyRegistration,
 } from '../services/passkey.service';
@@ -67,7 +68,34 @@ export const finishPasskeyRegistration = async (
 
     res.status(200).json({
       message: 'Passkey registered successfully',
-      verified: result.verified,
+      data: {
+        verified: result.verified,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const startPasskeyAuthentication = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    // 1. Get username from request body
+    const { username } = req.body;
+
+    if (!username) {
+      throw new Error('Username is required');
+    }
+
+    // 2. Generate authentication options
+    const options = await generatePasskeyAuthenticationOptions(username);
+
+    // 3. Return options to client
+    res.status(200).json({
+      data: options,
     });
   } catch (error) {
     next(error);
