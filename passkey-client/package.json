@@ -11,11 +11,12 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.0",
+    "@simplewebauthn/browser": "^13.2.2",
     "axios": "^1.6.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-router-dom": "^7.8.1",
-    "react-redux": "^9.2.0"
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.8.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
