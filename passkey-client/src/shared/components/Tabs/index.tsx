@@ -1,9 +1,8 @@
 import { useState } from "react";
 import styles from "./style.module.css";
-import Button from "../Button";
+import Radio from "../Radio";
 
 export default function Tabs({
-  key,
   tabItems,
   activeTab: activeTabProp,
   onChange,
@@ -27,14 +26,14 @@ export default function Tabs({
   return (
     <div>
       <div className={styles.tabContainer}>
-        {tabItems.map((tab, tabIndex) => (
-          <Button
-            key={`${key}-tab-${tabIndex}`}
-            onClick={() => handleTabChange(tab.key)}
-            className={activeTab === tab.key ? styles.activeTab : ""}
-          >
-            {tab.label}
-          </Button>
+        {tabItems.map((tab) => (
+          <Radio 
+            key={tab.key} 
+            label={tab.label} 
+            value={tab.key} 
+            checked={activeTab === tab.key}
+            onChange={handleTabChange} 
+          />
         ))}
       </div>
       <div>{tabItems.find((tab) => tab.key === activeTab)?.content}</div>
