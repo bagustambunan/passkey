@@ -1,20 +1,18 @@
 import { startRegistration, startAuthentication } from '@simplewebauthn/browser';
-import { post } from '../../shared/utils/fetch';
+import { loginPasskeyFinish, loginPasskeyStart, registerPasskeyFinish, registerPasskeyStart } from '../../shared/utils/service';
 
 export const usePasskey = () => {
   const registerPasskey = async () => {
     try {
       // 1. Get options from server
-      const optionsRes = await post<any, { data: any; message: string }>({
-        url: '/passkey/register-start',
-      });
+      const optionsRes = await registerPasskeyStart();
       const options = optionsRes.data;
 
       // 2. Pass options to browser
       const attResp = await startRegistration(options);
 
       // 3. Send response to server
-      await post({ url: '/passkey/register-finish', data: attResp });
+      await registerPasskeyFinish(attResp.response);
 
       alert('Passkey registered successfully');
     } catch (error) {
@@ -26,20 +24,14 @@ export const usePasskey = () => {
   const loginPasskey = async (username: string) => {
     try {
       // 1. Get options
-      const optionsRes = await post<any, { data: any; message: string }>({
-        url: '/passkey/login-start',
-        data: { username },
-      });
+      const optionsRes = await loginPasskeyStart(username);
       const options = optionsRes.data;
 
       // 2. Pass to browser
       const asseResp = await startAuthentication(options);
 
       // 3. Send response
-      await post({
-        url: '/passkey/login-finish',
-        data: { username, ...asseResp },
-      });
+      await loginPasskeyFinish(username, asseResp.response);
 
       // Success
       return true;

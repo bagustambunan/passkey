@@ -2,9 +2,9 @@ import Input from '../../../shared/components/Input';
 import Button from '../../../shared/components/Button';
 import Tabs from '../../../shared/components/Tabs';
 import { useState } from 'react';
-import { post } from '../../../shared/utils/fetch';
 import { useNavigate } from 'react-router-dom';
 import { usePasskey } from '../../hooks/usePasskey';
+import { login } from '../../../shared/utils/service';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -16,11 +16,9 @@ export default function LoginPage() {
 
   const handlePasswordLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      await post({ url: '/auth/login', data: { username, password } });
+    const res = await login(username, password);
+    if (res.message === 'Login successful') {
       navigate('/');
-    } catch (err) {
-      alert('Login failed');
     }
   };
 
@@ -54,7 +52,6 @@ export default function LoginPage() {
               label: 'With Password',
               content: (
                 <form
-                  onSubmit={handlePasswordLogin}
                   style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
                 >
                   <Input
@@ -71,7 +68,7 @@ export default function LoginPage() {
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                   />
-                  <Button type="submit">Login</Button>
+                  <Button onClick={handlePasswordLogin}>Login</Button>
                 </form>
               ),
             },
@@ -80,7 +77,6 @@ export default function LoginPage() {
               label: 'With Passkey',
               content: (
                 <form
-                  onSubmit={handlePasskeyLogin}
                   style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
                 >
                   <Input
@@ -90,7 +86,7 @@ export default function LoginPage() {
                     value={pkUsername}
                     onChange={e => setPkUsername(e.target.value)}
                   />
-                  <Button type="submit">Login with Passkey</Button>
+                  <Button onClick={handlePasskeyLogin}>Login with Passkey</Button>
                 </form>
               ),
             },

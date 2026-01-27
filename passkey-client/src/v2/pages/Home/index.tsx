@@ -3,7 +3,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { usePasskey } from '../../hooks/usePasskey';
 
 export default function HomePage() {
-  const { user, logout } = useAuth();
+  const { user, handleLogout } = useAuth();
   const { registerPasskey } = usePasskey();
 
   if (!user) {
@@ -14,7 +14,7 @@ export default function HomePage() {
     <div className="container">
       <span>Hi, {user.name}</span>
       <Button onClick={registerPasskey}>Register Passkey</Button>
-      <Button onClick={logout}>Logout</Button>
+      <Button onClick={handleLogout}>Logout</Button>
     </div>
   );
 }

@@ -1,35 +1,36 @@
-import { useState, useEffect } from 'react';
-import { get } from '../../shared/utils/fetch';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getUser, logout } from '../../shared/utils/service';
+import { useAsync } from '../../shared/hooks/useAsync';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import type { RootState } from '../redux/store';
+import { setUser, logout as logoutAction } from '../redux/slices/userSlice';
 
 export const useAuth = () => {
-  const [user, setUser] = useState<{ name: string; username: string } | null>(
-    null
-  );
+  const { isLoggedIn, user } = useAppSelector((state: RootState) => state.user);
+  const dispatch = useAppDispatch();
+
   const navigate = useNavigate();
 
+  const getUserAsync = useAsync(getUser);
+  const logoutAsync = useAsync(logout);
+
   const fetchUser = async () => {
-    try {
-      const res = await get<any, { data: any }>({ url: '/auth/user' });
-      setUser(res.data);
-    } catch (error) {
-      setUser(null);
+    const res = await getUserAsync.execute();
+    if (res.data) {
+      dispatch(setUser(res.data));
     }
   };
 
-  const logout = async () => {
-    try {
-      await get({ url: '/auth/logout' });
-      setUser(null);
-      navigate('/login');
-    } catch (error) {
-      console.error(error);
-    }
+  const handleLogout = async () => {
+    await logoutAsync.execute();
+    dispatch(logoutAction());
+    navigate('/login');
   };
 
   useEffect(() => {
     fetchUser();
   }, []);
 
-  return { user, logout };
+  return { isLoggedIn, user, handleLogout };
 };
