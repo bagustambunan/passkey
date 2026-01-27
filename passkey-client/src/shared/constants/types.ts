@@ -8,41 +8,7 @@ export type Response<T> = {
   data?: T;
 };
 
-export type LoginRequest = {
-  username: string;
-  password: string;
-};
-
-export type LoginResponse = Response<undefined>;
-
-export type GetUserResponse = Response<User>;
-
 export type User = {
+  name: string;
   username: string;
 };
-
-export type LogoutResponse = Response<undefined>;
-
-export type StartPasskeyRegistrationResponse = Response<PublicKeyCredentialCreationOptionsJSON>;
-
-export type FinishPasskeyRegistrationResponse = Response<undefined>;
-
-export type Credential = Omit<PublicKeyCredential, "response"> & {
-  response: AuthenticatorResponse & {
-    attestationObject: ArrayBuffer;
-  };
-};
-
-export type StringifiedCredential = {
-  id: string;
-  rawId: string;
-  response: {
-    clientDataJSON: string;
-    attestationObject: string;
-  };
-  type: PublicKeyCredentialType;
-};
-
-export type StartPasskeyAuthenticationResponse = Response<PublicKeyCredentialRequestOptions>;
-
-export type FinishPasskeyAuthenticationResponse = Response<undefined>;
