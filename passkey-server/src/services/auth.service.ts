@@ -1,11 +1,13 @@
 import { User } from '../types/model';
 
 const dummyUser1: User = {
+  name: 'Bagus',
   username: 'bagus',
   password: '123',
 };
 
 const dummyUser2: User = {
+  name: 'Bagus 2',
   username: 'bagus2',
   password: '123',
 };

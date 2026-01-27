@@ -1,0 +1,3 @@
+export const COOKIE_KEY = {
+  AUTH_USERNAME: 'AUTH_USERNAME',
+};

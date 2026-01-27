@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { getUser } from '../services/auth.service';
+import { COOKIE_KEY } from '../constants';
+import { formatResponse } from '../utils';
 import { getCookieValue } from '../utils/cookie';
 
 export const handleLogin = async (
@@ -19,25 +21,25 @@ export const handleLogin = async (
     if (user.password !== password) {
       throw new Error('Invalid password');
     }
-    res.cookie('AUTH_USERNAME', username, {
+    res.cookie(COOKIE_KEY.AUTH_USERNAME, username, {
       httpOnly: true,
       secure: true,
       maxAge: 1000 * 60 * 60 * 24 * 30,
     });
-    res.status(200).json({ message: 'Login successful' });
+    res.status(200).json(formatResponse('Login successful', null));
   } catch (error) {
     next(error);
   }
 };
 
-export const handleUser = async (
+export const handleGetUser = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
     const incomingCookie = req.headers.cookie ?? '';
-    const username = getCookieValue(incomingCookie, 'AUTH_USERNAME');
+    const username = getCookieValue(incomingCookie, COOKIE_KEY.AUTH_USERNAME);
 
     if (!username) {
       throw new Error('No auth');
@@ -48,11 +50,12 @@ export const handleUser = async (
       throw new Error('User not found');
     }
 
-    res.status(200).json({
-      data: {
+    res.status(200).json(
+      formatResponse('Get user successful', {
         username: user.username,
-      },
-    });
+        name: user.name,
+      })
+    );
   } catch (error) {
     next(error);
   }
@@ -64,8 +67,8 @@ export const handleLogout = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    res.clearCookie('AUTH_USERNAME');
-    res.status(200).json({ message: 'Logout successful' });
+    res.clearCookie(COOKIE_KEY.AUTH_USERNAME);
+    res.status(200).json(formatResponse('Logout successful', null));
   } catch (error) {
     next(error);
   }
