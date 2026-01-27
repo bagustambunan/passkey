@@ -12,7 +12,7 @@ export const usePasskey = () => {
       const attResp = await startRegistration(options);
 
       // 3. Send response to server
-      await registerPasskeyFinish(attResp.response);
+      await registerPasskeyFinish(attResp);
 
       alert('Passkey registered successfully');
     } catch (error) {
@@ -31,7 +31,7 @@ export const usePasskey = () => {
       const asseResp = await startAuthentication(options);
 
       // 3. Send response
-      await loginPasskeyFinish(username, asseResp.response);
+      await loginPasskeyFinish(username, asseResp);
 
       // Success
       return true;

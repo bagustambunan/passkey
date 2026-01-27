@@ -31,9 +31,9 @@ export const registerPasskeyStart = async () => {
 };
 
 export const registerPasskeyFinish = async (attResp: any) => {
-  const response = await post<{ attResp: any }, Response<null>>({
+  const response = await post<any, Response<null>>({
     url: '/passkey/register-finish',
-    data: { attResp },
+    data: attResp,
   });
   return response;
 };
@@ -47,9 +47,9 @@ export const loginPasskeyStart = async (username: string) => {
 };
 
 export const loginPasskeyFinish = async (username: string, asseResp: any) => {
-  const response = await post<{ username: string; asseResp: any }, Response<null>>({
+  const response = await post<any, Response<null>>({
     url: '/passkey/login-finish',
-    data: { username, asseResp },
+    data: { ...asseResp, username },
   });
   return response;
 };
