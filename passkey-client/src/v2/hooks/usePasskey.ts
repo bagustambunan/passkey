@@ -7,9 +7,11 @@ export const usePasskey = () => {
       // 1. Get options from server
       const optionsRes = await registerPasskeyStart();
       const options = optionsRes.data;
+      console.log("Register [step 1]: challenge from server", options);
 
       // 2. Pass options to browser
       const attResp = await startRegistration(options);
+      console.log("Register [step 2]: generated public key", attResp)
 
       // 3. Send response to server
       await registerPasskeyFinish(attResp);
@@ -26,9 +28,11 @@ export const usePasskey = () => {
       // 1. Get options
       const optionsRes = await loginPasskeyStart(username);
       const options = optionsRes.data;
+      console.log("Login [step 1]: challenge from server", options);
 
       // 2. Pass to browser
       const asseResp = await startAuthentication(options);
+      console.log("Login [step 2]: generated signature", asseResp);
 
       // 3. Send response
       await loginPasskeyFinish(username, asseResp);

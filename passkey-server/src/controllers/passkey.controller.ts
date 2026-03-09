@@ -100,6 +100,7 @@ export const finishPasskeyRegistration = async (
         counter,
         transports: body.response.transports,
       };
+      console.log("Register: newAuthenticator", newAuthenticator);
 
       const authenticators = user.authenticators || [];
       authenticators.push(newAuthenticator);
