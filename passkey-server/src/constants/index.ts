@@ -4,4 +4,4 @@ export const COOKIE_KEY = {
 
 export const RP_ID = 'localhost';
 export const RP_NAME = 'Passkey Demo';
-export const ORIGIN = 'http://localhost:5173';
+export const ORIGIN = 'http://localhost:1945';
